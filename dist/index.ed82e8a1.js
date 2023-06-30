@@ -574,11 +574,34 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"cyUIL":[function(require,module,exports) {
-// import './assets/scss/style.scss'
+var _model = require("./components/model");
+var _templates = require("./components/templates");
+var _styleScss = require("../scss/style.scss");
+const $site = document.querySelector("#site");
+(0, _model.model).forEach((block)=>{
+    const toHTML = (0, _templates.templates)[block.type];
+    if (toHTML) $site.insertAdjacentHTML("beforeend", toHTML(block));
+});
+
+},{"./components/model":"6TwLO","./components/templates":"9tmHB","../scss/style.scss":"bQ6jc"}],"6TwLO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "model", ()=>model);
+var _imagePng = require("../../img/image.png");
+var _imagePngDefault = parcelHelpers.interopDefault(_imagePng);
 const model = [
     {
         type: "title",
-        value: "Hello World from JS"
+        value: "Site constructor using vanilla JS",
+        options: {
+            tag: "h2",
+            styles: {
+                padding: "1.5rem",
+                "text-align": "center",
+                color: "#fff",
+                background: "linear-gradient(to right, #ff0099, #493240)"
+            }
+        }
     },
     {
         type: "text",
@@ -591,50 +614,127 @@ const model = [
             "22222222222",
             "33333333333"
         ]
+    },
+    {
+        type: "image",
+        value: (0, _imagePngDefault.default)
     }
 ];
-const $site = document.querySelector("#site");
-model.forEach((block)=>{
-    let html = "";
-    if (block.type === "title") html = title(block);
-    else if (block.type === "text") html = text(block);
-    else if (block.type === "columns") html = columns(block);
-    $site.insertAdjacentHTML("beforeend", html);
-});
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../img/image.png":"bObmM"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"bObmM":[function(require,module,exports) {
+module.exports = require("3716b2a137387e75").getBundleURL("k9VqJ") + "image.35cffdcb.png" + "?" + Date.now();
+
+},{"3716b2a137387e75":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return "/";
+}
+function getBaseURL(url) {
+    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
+}
+// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
+    if (!matches) throw new Error("Origin not found");
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}],"9tmHB":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "templates", ()=>templates);
+var _utils = require("./utils");
 function title(block) {
-    return `
-        <div class="row">
-            <div class="col-sm">
-                <p>${block.value}</p>
-            </div>
-        </div>
-    `;
+    const { tag = "h1", styles } = block.options;
+    return (0, _utils.row)((0, _utils.col)(`<${tag}>${block.value}</${tag}>`), (0, _utils.css)(styles));
 }
 function text(block) {
-    return `
-        <div class="row">
-            <div class="col-sm">
-                <p>${block.value}</p>
-            </div>
-        </div>
-    `;
+    return (0, _utils.row)((0, _utils.col)(`<p>${block.value}</p>`));
 }
 function columns(block) {
-    let html = "";
-    block.value.forEach((item)=>{
-        html += `
-            <div class="col-sm">
-                ${item}
-            </div>
-        `;
-    });
-    return `
-        <div class="row">
-            ${html}
-        </div>
-    `;
+    const html = block.value.map((0, _utils.col)).join("");
+    return (0, _utils.row)(html);
+}
+function image(block) {
+    return (0, _utils.row)(`<img src="${block.value}">`);
+}
+const templates = {
+    title,
+    text,
+    columns,
+    image
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./utils":"MOfEd"}],"MOfEd":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "row", ()=>row);
+parcelHelpers.export(exports, "col", ()=>col);
+parcelHelpers.export(exports, "css", ()=>css);
+function row(content, styles = "") {
+    return `<div class="row" style="${styles}">${content}</div>`;
+}
+function col(content) {
+    return `<div class="col-sm">${content}</div>`;
+}
+function css(styles = {}) {
+    // const keys = Object.keys(styles)
+    // const arr = keys.map(key => `${key}: ${styles[key]}`)
+    // return arr.join(';')
+    const toString = (key)=>`${key}: ${styles[key]}`;
+    return Object.keys(styles).map(toString).join(";");
 }
 
-},{}]},["c4XzJ","cyUIL"], "cyUIL", "parcelRequire565e")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bQ6jc":[function() {},{}]},["c4XzJ","cyUIL"], "cyUIL", "parcelRequire565e")
 
 //# sourceMappingURL=index.ed82e8a1.js.map
