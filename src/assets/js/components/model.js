@@ -11,7 +11,13 @@ export const model = [
             background: 'linear-gradient(to right, #ff0099, #493240)'
         }
     }),
-    new TextBlock('Here is some text'),
+    new TextBlock('Here is some text', {
+        styles: {
+            padding: '1rem',
+            'text-align': 'center',
+            color: 'red',
+        }
+    }),
     new ColumnsBlock([
         '11111111111',
         '22222222222',

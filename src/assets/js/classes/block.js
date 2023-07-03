@@ -28,7 +28,7 @@ export class TextBlock extends Block {
     }
 
     toHTML() {
-        return row(col(`<p>${this.value}</p>`))
+        return row(col(`<p>${this.value}</p>`), css(this.options.styles))
     }
 }
 

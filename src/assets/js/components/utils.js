@@ -11,6 +11,7 @@ export function css(styles = {}) {
   // const arr = keys.map(key => `${key}: ${styles[key]}`)
   // return arr.join(';')
 
+  if (typeof styles === 'string') return styles
   const toString = key => `${key}: ${styles[key]}`
   return Object.keys(styles).map(toString).join(';')
 }
